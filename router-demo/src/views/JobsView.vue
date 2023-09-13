@@ -1,0 +1,54 @@
+<template>
+  <h1>Jobs</h1>
+  <div v-if="jobs.length">
+    <div v-for="job in jobs" :key="job.id" class="job">
+      <router-link :to="{ name: 'JobDetails', params: { id: job.id } }">
+        <h2>{{ job.title }}</h2>
+      </router-link>
+    </div>
+  </div>
+  <div v-else>
+    <h1>Loading Jobs.....</h1>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      jobs: []
+    }
+  },
+  mounted() {
+    fetch('http://localhost:3000/jobs')
+      .then((res) => res.json())
+      .then((data) => this.jobs = data)
+      .catch(err => console.log(err.message))
+  },
+  methods: {
+    showDetails(id) {
+      this.jobs[id].hidden = !this.jobs[id].hidden;
+    },
+  },
+};
+</script>
+<style scoped>
+.job h2 {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px auto;
+  max-width: 600px;
+  cursor: pointer;
+  color: #444;
+}
+
+.job h2:hover {
+  background-color: #ec6d6d;
+  color: white;
+}
+
+.job a {
+  text-decoration: none;
+}
+</style>
